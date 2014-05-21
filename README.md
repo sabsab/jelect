@@ -1,11 +1,12 @@
 # Jelect
+![Jelect](https://raw.githubusercontent.com/CSSSR/jelect/master/src/img/jelect.png)<br>
 A functional wrapper for a stylized select.
 
 [View example](https://csssr.github.io/jelect/)
 
 ## Download
-* [The compressed, production jquery.jelect.min.js v0.1.0](https://github.com/CSSSR/jelect/tree/master/jquery.jelect.min.js)
-* [The uncompressed, development jquery.jelect.js v0.1.0](https://github.com/CSSSR/jelect/tree/master/jquery.jelect.js)
+* [The compressed, production jquery.jelect.min.js v0.1.0](https://raw.githubusercontent.com/CSSSR/jelect/master/jquery.jelect.min.js)
+* [The uncompressed, development jquery.jelect.js v0.1.0](https://raw.githubusercontent.com/CSSSR/jelect/master/jquery.jelect.js)
 
 
 ## Compatibility
@@ -68,15 +69,15 @@ $( '#jelect' ).on( 'change', function (e) {
 Uses for custom CSS classes.
 
 Key | Value | Description
---- | ---
-wrapper | '.jelect' | A Jelect wrapper.
-input | '.jelect-input' | An input type text.
-current | '.jelect-current' | A caption for a current text.
-optionsWrapper | '.jelect-options' | A dropdown wrapper.
-option | '.jelect-option' | An option.
-activeClass | 'jelect_state_active' | An active state of Jelect wrapper.
-optionsWrapperActiveClass | 'jelect-options_state_active' | An active state of a dropdown wrapper.
-optionActiveClass | 'jelect-option_state_active' | An active state of option.
+--- | --- | ---
+`wrapper` | `'.jelect'` | A Jelect wrapper.
+`input` | `'.jelect-input'` | An input type text.
+`current` | `'.jelect-current'` | A caption for a current text.
+`optionsWrapper` | `'.jelect-options'` | A dropdown wrapper.
+`option` | `'.jelect-option'` | An option.
+`activeClass` | `'jelect_state_active'` | An active state of Jelect wrapper.
+`optionsWrapperActiveClass` | `'jelect-options_state_active'` | An active state of a dropdown wrapper.
+`optionActiveClass` | `'jelect-option_state_active'` | An active state of option.
 
 ## License
 
