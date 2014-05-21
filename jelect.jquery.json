@@ -1,11 +1,10 @@
 {
-	"name": "Jelect",
+	"name": "jelect",
 	"title": "jQuery Jelect",
 	"description": "A functional wrapper for a stylized select.",
 	"keywords": [
 		"select",
 		"jelect",
-		"custom select",
 		"dropdown",
 		"drop-down"
 	],
