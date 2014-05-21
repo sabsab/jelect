@@ -21,6 +21,7 @@
 	],
 	"bugs": "https://github.com/CSSSR/jelect/issues",
 	"homepage": "https://github.com/CSSSR/jelect/",
+	"demo": "https://csssr.github.io/jelect/",
 	"docs": "https://github.com/CSSSR/jelect/#readme",
 	"download": "https://github.com/CSSSR/jelect/archive/master.zip",
 	"dependencies": {
