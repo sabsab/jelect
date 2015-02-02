@@ -1,0 +1,104 @@
+mixin jelect(obj)
+	.jelect.js-jelect(id=obj.id role='combobox')
+		each option in obj.options
+			if option[2]
+				input.jelect-input.js-jelect-input(
+					id=obj.inputId
+					name=obj.name
+					value=option[1]
+					data-text=option[0]
+					type='text'
+				)
+
+				.jelect-current.js-jelect-current(tabindex=1 role='button')= option[0]
+
+		.jelect-options.js-jelect-options(role='list-box')
+			.jelect-scroller.js-jelect-scroller
+				each option in obj.options
+					.jelect-option.js-jelect-option(
+						class=option[2] ? 'jelect-option_state_active' : ''
+						data-val=option[1]
+						tabindex=1
+						role='option'
+					)= option[0]
+			.jelect-track
+				.jelect-scrollbar.js-jelect-scrollbar
+
+.jelect-box
+	.jelect-col
+		+jelect({
+			id: 'jelectTool1',
+			inputId: 'jelectToolInput',
+			inputName: 'tool',
+			options: [
+				['gulp', 0, true],
+				['browser-sync', 1],
+				['del', 2],
+				['gulp-autoprefixer', 3],
+				['gulp-combine-media-queries', 4],
+				['gulp-concat', 5],
+				['gulp-csscomb', 6],
+				['gulp-imagemin', 7],
+				['gulp-jade', 8],
+				['gulp-jscs', 9],
+				['gulp-jshint', 10],
+				['gulp-minify-css', 11],
+				['gulp-prettify', 12],
+				['gulp-stylus', 13],
+				['gulp-uglify', 14],
+				['gulp.spritesmith', 15],
+				['rupture', 16]
+			]
+		})
+
+	.jelect-col
+		+jelect({
+			id: 'jelectTool2',
+			inputId: 'jelectToolInput2',
+			inputName: 'tool2',
+			options: [
+				['gulp', 0, true],
+				['browser-sync', 1],
+				['del', 2],
+				['gulp-autoprefixer', 3],
+				['gulp-combine-media-queries', 4],
+				['gulp-concat', 5],
+				['gulp-csscomb', 6],
+				['gulp-imagemin', 7],
+				['gulp-jade', 8],
+				['gulp-jscs', 9],
+				['gulp-jshint', 10],
+				['gulp-minify-css', 11],
+				['gulp-prettify', 12],
+				['gulp-stylus', 13],
+				['gulp-uglify', 14],
+				['gulp.spritesmith', 15],
+				['rupture', 16]
+			]
+		})
+
+	.jelect-col
+		+jelect({
+			id: 'jelectTool3',
+			inputId: 'jelectToolInput3',
+			inputName: 'tool3',
+			options: [
+				['gulp', 0, true],
+				['browser-sync', 1],
+				['del', 2],
+				['gulp-autoprefixer', 3],
+				['gulp-combine-media-queries', 4],
+				['gulp-concat', 5],
+				['gulp-csscomb', 6],
+				['gulp-imagemin', 7],
+				['gulp-jade', 8],
+				['gulp-jscs', 9],
+				['gulp-jshint', 10],
+				['gulp-minify-css', 11],
+				['gulp-prettify', 12],
+				['gulp-stylus', 13],
+				['gulp-uglify', 14],
+				['gulp.spritesmith', 15],
+				['rupture', 16]
+			]
+		})

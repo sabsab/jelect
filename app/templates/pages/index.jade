@@ -1,0 +1,17 @@
+extends ../layouts/default
+
+block head
+	- pageTitle = 'CSSSR Project Template';
+
+block scriptsLibs
+	+script([
+		'libs/baron.min.js',
+		'libs/jquery.jelect.min.js',
+		'libs/jquery.jelect.baron.min.js'
+	])
+
+block scripts
+	+script(['common.js'])
+
+block content
+	include ../blocks/main

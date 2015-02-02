@@ -1,114 +1,310 @@
-;(function ( $, window, document, undefined ) {
+/*! jquery.jelect.js v1.0.0 | felixexter | MIT License | https://github.com/CSSSR/jelect/ */
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		define(['jquery'], factory);
+	} else if (typeof exports === 'object') {
+		factory(require('jquery'));
+	} else {
+		factory(jQuery);
+	}
+}(function ($) {
+
 	'use strict';
 
-	var Jelect,
-		pluginName = 'jelect',
-		dataPlugin = 'plugin_' + pluginName,
-		defaults = {
-			wrapper: '.jelect',
-			input: '.jelect-input',
-			current: '.jelect-current',
-			optionsWrapper: '.jelect-options',
-			option: '.jelect-option',
-			activeClass: 'jelect_state_active',
-			optionsWrapperActiveClass: 'jelect-options_state_active',
-			optionActiveClass: 'jelect-option_state_active'
-		};
+	var
+		Jelect,
+		pluginName = 'jelect';
 
-	Jelect = function ( element, options ) {
-		this.element = element;
-		this.$element = $( element );
-		this.options = $.extend( defaults, options );
-		this._defaults = defaults;
+	$[pluginName] = {
+		version: '1.0.0',
+		options: {
+			classes: {
+				containerActive: pluginName + '_state_active',
+				currentActive: pluginName + '-current_state_active',
+				optionsActive: pluginName + '-options_state_active',
+				optionActive: pluginName + '-option_state_active'
+			},
+			plugins: []
+		},
+		plugins: {},
+		selectors: {
+			container: '.js-' + pluginName,
+			input: '.js-' + pluginName + '-input',
+			current: '.js-' + pluginName + '-current',
+			options: '.js-' + pluginName + '-options',
+			option: '.js-' + pluginName + '-option'
+		},
+		keyCode: {
+			ENTER: 13,
+			ESC: 27
+		}
+	};
+
+	Jelect = function ($jelect, options) {
+		var
+			defaults = $[pluginName],
+			selectors = defaults.selectors,
+			jelect = {
+				$jelect: $jelect,
+				$jelectCurrent: $jelect.find(selectors.current),
+				$jelectOptions: $jelect.find(selectors.options),
+				$jelectInput: $jelect.find(selectors.input),
+				options: $.extend(true, {}, defaults.options, options || {})
+			};
+
+		$.extend(true, this, jelect);
 
 		this.init();
 	};
 
-	Jelect.prototype = {
+	Jelect.prototype.init = function () {
+		var
+			_this = this,
+			jelect = $[pluginName],
+			selectors = jelect.selectors,
+			classes = _this.options.classes,
+			initVal = _this.val();
 
-		init: function ( options ) {
+		_this.trigger('init');
 
-			var that = this,
-				opts = $.extend( that.options, options ),
-				$select = that.$element,
-				$selectOptions = $( opts.optionsWrapper );
+		// Set init value
+		_this.$jelect.val(initVal);
 
-			$select
-				// Open a dropdown
-				.children( opts.current )
-				.on( 'click.jelectCurrentClick', function () {
-					var $this = $( this ),
-						$thisSelect = $this.closest( opts.wrapper ),
-						$thisSelectOptions = $this.siblings( opts.optionsWrapper );
+		// Open a dropdown
+		_this.$jelectCurrent.on('click ' + pluginName + '.clickCurrent', function () {
+			var
+				// Select all active containers without current
+				$container = $(selectors.container).filter('.' + classes.containerActive).not(_this.$jelect),
 
-					$thisSelectOptions.toggleClass( opts.optionsWrapperActiveClass );
-					$selectOptions.filter( ':visible' ).not( $thisSelectOptions ).removeClass( opts.optionsWrapperActiveClass );
+				// Select all active options container without current
+				$options = $(selectors.options).filter('.' + classes.optionsActive).not(_this.$jelectOptions),
 
-					$thisSelect.toggleClass( opts.activeClass );
-					$select.not( $thisSelect ).removeClass( opts.activeClass );
-				})
+				canRunTrigger = (
+					!_this.$jelect.hasClass(classes.containerActive) &&
+					!_this.$jelectOptions.hasClass(classes.optionsActive)
+				);
 
-				// Select an option
-				.siblings( opts.optionsWrapper )
-				.on( 'click.jelectOptionClick', opts.option, function () {
-					var $this = $( this ),
-						currentVal = $this.data('val'),
-						currentText = $this.text();
+			if (canRunTrigger) {
+				_this.trigger('beforeOpen');
+			}
 
-					$this
-						// Activate a selected option
-						.addClass( opts.optionActiveClass )
-						.siblings()
-						.removeClass( opts.optionActiveClass )
+			// Close all without current
+			if ($container.length && $options.length) {
+				$container.removeClass(classes.containerActive);
+				$options.removeClass(classes.optionsActive);
+			}
 
-						// Hide a dropdown
-						.closest( opts.optionsWrapper )
-						.removeClass( opts.optionsWrapperActiveClass )
+			// Open or close current
+			_this.$jelect.toggleClass(classes.containerActive);
+			_this.$jelectOptions.toggleClass(classes.optionsActive);
 
-						// Deactivate a Jelect wrapper
-						.closest( opts.wrapper )
-						.removeClass( opts.activeClass )
+			if (canRunTrigger) {
+				_this.$jelectCurrent.trigger('focus');
 
-						// Set a current text
-						.children( opts.current )
-						.text( currentText )
+				_this.trigger('afterOpen');
+			}
+		});
 
-						// Change the value of input and fire trigger `change`
-						.siblings( opts.input )
-						.val( currentVal )
-						.attr( 'data-text', currentText )
-						.trigger( 'change' );
-				});
+		// Select an option
+		_this.$jelectOptions.on('click ' + pluginName + '.changeOption', selectors.option, function () {
+			var
+				$this = $(this),
+				currentVal = $this.data('val'),
+				currentText = $this.text();
 
-			// Hide dropdowns when click outside
-			$( document ).on( 'click.jelectOutsideClick', function ( e ) {
-				var $target = $( e.target );
+			// Activate a selected option
+			$this
+				.addClass(classes.optionActive)
+				.siblings(selectors.option)
+				.removeClass(classes.optionActive);
 
-				if (
-					!$target.is( opts.wrapper ) &&
-					!$target.closest( opts.wrapper ).length &&
-					$selectOptions.filter( ':visible' ).length
-				) {
-					$selectOptions
-						.removeClass( opts.optionsWrapperActiveClass )
-						.closest( opts.wrapper )
-						.removeClass( opts.activeClass );
-				}
-			});
+			// Hide a dropdown
+			_this.$jelectOptions.removeClass(classes.optionsActive);
 
-		},
+			// Deactivate a Jelect container and fire trigger `jelect.change`
+			_this.$jelect
+				.val(currentVal)
+				.removeClass(classes.containerActive)
+				.trigger('jelect.change');
 
-		destroy: function () {
-			this.$element.data( dataPlugin, null );
-		}
+			// Set a current text
+			_this.$jelectCurrent
+				.text(currentText)
+				.attr('data-val', currentVal)
+				.trigger('focus');
+
+			// Change the value of input and fire trigger `change`
+			_this.$jelectInput
+				.val(currentVal)
+				.trigger('change');
+
+			_this.trigger('change');
+		});
+
 	};
 
-	$.fn[ pluginName ] = function ( options ) {
-		return this.each(function () {
-			if ( !$( this ).data( dataPlugin ) ) {
-				$( this ).data( dataPlugin, new Jelect( this, options ) );
+	Jelect.prototype.trigger = function (trigger) {
+		var
+			_this = this;
+
+		$.each(_this.options.plugins || [], function (i, plugin) {
+			plugin = $[pluginName].plugins[plugin];
+
+			if (plugin && plugin[trigger]) {
+				plugin[trigger]({
+					$jelect: _this.$jelect,
+					$jelectCurrent: _this.$jelectCurrent,
+					$jelectOptions: _this.$jelectOptions,
+					$jelectInput: _this.$jelectInput,
+					options: _this.options,
+					text: _this.text(),
+					val: _this.val()
+				});
 			}
 		});
 	};
 
-})( jQuery, window, document );
+	Jelect.prototype.text = function () {
+		return this.$jelectCurrent.text().trim();
+	};
+
+	Jelect.prototype.val = function () {
+		return this.$jelect.val();
+	};
+
+	// Hide dropdowns when click outside
+	$(window.document)
+		.on('click ' + pluginName + '.clickOutside', function (event) {
+			var
+				jelect = $[pluginName],
+				selectors = jelect.selectors,
+				jelectData,
+				classes,
+				$target = $(event.target),
+				$options = $(selectors.options);
+
+			if (
+				!$target.is(selectors.container) &&
+				!$target.closest(selectors.container).length
+			) {
+				jelectData = $options.closest(selectors.container).data('jelect');
+
+				if (!jelectData) {
+					return;
+				}
+
+				classes = jelectData.options.classes;
+
+				if ($options.hasClass(classes.optionsActive)) {
+					$options
+						.removeClass(classes.optionsActive)
+						.closest(selectors.container)
+						.removeClass(classes.containerActive);
+
+					jelectData.trigger('clickOutside');
+				}
+			}
+		})
+		.on('keydown ' + pluginName + '.keydown', function (event) {
+			var
+				$target = $(event.target),
+				jelect = $[pluginName],
+				keyCode = jelect.keyCode,
+				eventKeyCode = event.keyCode,
+				selectors = jelect.selectors,
+				jelectData,
+				classes,
+				$options;
+
+			if ($target.is(selectors.current)) {
+				jelectData = $target.closest(selectors.container).data(pluginName);
+				classes = jelectData.options.classes;
+				$options = $target.siblings(selectors.options).filter(':visible');
+
+				switch (eventKeyCode) {
+					case keyCode.ENTER: {
+						$target.trigger(pluginName + '.clickCurrent');
+
+						event.preventDefault();
+
+						break;
+					}
+
+					case keyCode.ESC: {
+						if ($options.length) {
+							$target.trigger(pluginName + '.clickCurrent');
+						}
+
+						$target.trigger('blur');
+
+						break;
+					}
+				}
+			} else if ($target.is(selectors.option)) {
+				jelectData = $target.closest(selectors.container).data(pluginName);
+				classes = jelectData.options.classes;
+
+				if (eventKeyCode === keyCode.ENTER) {
+					$target.trigger(pluginName + '.changeOption');
+				}
+			}
+		});
+
+	$.fn[pluginName] = function (options) {
+		var
+			_this = this,
+			args = arguments;
+
+		// Is the first parameter an object (options), or was omitted,
+		// instantiate a new instance of the plugin.
+		if (options === undefined || typeof options === 'object') {
+			return _this.each(function (i, element) {
+
+				// Only allow the plugin to be instantiated once,
+				// so we check that the element has no plugin instantiation yet
+				if (!$.data(element, pluginName)) {
+
+					// if it has no instance, create a new one,
+					// pass options to our plugin constructor,
+					// and store the plugin instance
+					// in the elements jQuery data object.
+					$.data(element, pluginName, new Jelect($(element), options));
+				}
+			});
+
+		// If the first parameter is a string and it doesn't start
+		// with an underscore or "contains" the `init`-function,
+		// treat this as a call to a public method.
+		} else if (typeof options === 'string' && options[0] !== '_' && options !== 'init') {
+
+			// Cache the method call
+			// to make it possible
+			// to return a value
+			var returns;
+
+			_this.each(function (i, element) {
+				var instance = $.data(element, pluginName);
+
+				// Tests that there's already a plugin-instance
+				// and checks that the requested public method exists
+				if (instance instanceof Jelect && typeof instance[options] === 'function') {
+
+					// Call the method of our plugin instance,
+					// and pass it the supplied arguments.
+					returns = instance[options].apply(instance, Array.prototype.slice.call(args, 1));
+				}
+
+				// Allow instances to be destroyed via the 'destroy' method
+				if (options === 'destroy') {
+					$.data(this, pluginName, null);
+				}
+			});
+
+			// If the earlier cached method
+			// gives a value back return the value,
+			// otherwise return this to preserve chainability.
+			return returns !== undefined ? returns : _this;
+		}
+	};
+
+}));
