@@ -54,13 +54,14 @@
 					var $this = $( this ),
 						currentVal = $this.data('val'),
 						currentText = $this.text();
-
+					if ($this.siblings().length>0){
+							$this
+								// Activate a selected option
+								.siblings()
+								.removeClass( opts.optionActiveClass )
+					}
 					$this
-						// Activate a selected option
 						.addClass( opts.optionActiveClass )
-						.siblings()
-						.removeClass( opts.optionActiveClass )
-
 						// Hide a dropdown
 						.closest( opts.optionsWrapper )
 						.removeClass( opts.optionsWrapperActiveClass )

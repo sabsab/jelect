@@ -62,6 +62,7 @@
 								.removeClass( opts.optionActiveClass )
 						}
 						$this
+							.addClass( opts.optionActiveClass )
 							// Hide a dropdown
 							.closest( opts.optionsWrapper )
 							.removeClass( opts.optionsWrapperActiveClass )
