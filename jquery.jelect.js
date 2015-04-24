@@ -54,30 +54,31 @@
 					var $this = $( this ),
 						currentVal = $this.data('val'),
 						currentText = $this.text();
+					    if ($this.siblings().length>0){
+							$this
+								// Activate a selected option
+								//.addClass( opts.optionActiveClass )
+								.siblings()
+								.removeClass( opts.optionActiveClass )
+						}
+						$this
+							// Hide a dropdown
+							.closest( opts.optionsWrapper )
+							.removeClass( opts.optionsWrapperActiveClass )
 
-					$this
-						// Activate a selected option
-						.addClass( opts.optionActiveClass )
-						.siblings()
-						.removeClass( opts.optionActiveClass )
+							// Deactivate a Jelect wrapper
+							.closest( opts.wrapper )
+							.removeClass( opts.activeClass )
 
-						// Hide a dropdown
-						.closest( opts.optionsWrapper )
-						.removeClass( opts.optionsWrapperActiveClass )
+							// Set a current text
+							.children( opts.current )
+							.text( currentText )
 
-						// Deactivate a Jelect wrapper
-						.closest( opts.wrapper )
-						.removeClass( opts.activeClass )
-
-						// Set a current text
-						.children( opts.current )
-						.text( currentText )
-
-						// Change the value of input and fire trigger `change`
-						.siblings( opts.input )
-						.val( currentVal )
-						.attr( 'data-text', currentText )
-						.trigger( 'change' );
+							// Change the value of input and fire trigger `change`
+							.siblings( opts.input )
+							.val( currentVal )
+							.attr( 'data-text', currentText )
+							.trigger( 'change' );
 				});
 
 			// Hide dropdowns when click outside
