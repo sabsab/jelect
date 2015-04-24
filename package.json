@@ -23,8 +23,8 @@
 		"type": "MIT",
 		"url": "http://www.opensource.org/licenses/mit-license.php"
 	}],
-	"bugs": "https://github.com/CSSSR/jelect/issues",
-	"homepage": "https://github.com/CSSSR/jelect/",
+	"bugs": "https://github.com/sabsab/jelect/issues",
+	"homepage": "https://github.com/sabsab/jelect/",
 	"engines": {
 		"node": ">= 0.10.0"
 	},
