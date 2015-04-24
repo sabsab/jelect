@@ -5,7 +5,7 @@
 	"main": "jquery.jelect.min.js",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/CSSSR/jelect.git"
+		"url": "https://github.com/sabsab/jelect.git"
 	},
 	"keywords": [
 		"select",
